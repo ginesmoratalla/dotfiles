@@ -2,10 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, unstable-channel, ... }:
 
 let 
-  unstable = import <nixos-unstable> { config = config.nixpkgs.config; };
+  unstable = import unstable-channel {
+    system = pkgs.system;
+  };
 in
 {
   imports =
