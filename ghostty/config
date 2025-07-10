@@ -1,0 +1,5 @@
+config-file = colors
+config-file = keybindings
+config-file = window
+
+font-size = 14

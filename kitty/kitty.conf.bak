@@ -1,0 +1,27 @@
+# - Font config  
+font_family JetBrainsMono Nerd Font  # Replace with your preferred font
+font_size 14
+
+# Set the opacity (replace 0.8 with your desired opacity)
+background_opacity 1
+background_blur 4
+background #ABCDEF
+# Keyboard Shortcuts
+
+# Increase font size
+map ctrl+plus change_font_size all +2.0
+# Decrease font size
+map ctrl+minus change_font_size all -2.0
+
+
+# Copy paste
+map ctrl+shift+c copy_to_clipboard
+map ctrl+v paste_from_clipboard
+
+# BEGIN_KITTY_THEME
+# Adventure Time
+include current-theme.conf
+# END_KITTY_THEME
+
+
+
