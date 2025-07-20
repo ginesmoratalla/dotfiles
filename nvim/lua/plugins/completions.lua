@@ -40,7 +40,7 @@ return {
 
 				window = {
 					completion = cmp.config.window.bordered({
-            col_offset = 0,
+            col_offset = -4,
             side_padding = 0,
           }),
 					documentation = cmp.config.window.bordered(),
@@ -73,7 +73,7 @@ return {
         vim.api.nvim_set_hl(0, "CmpItemAbbrDeprecated", { fg = "#7E8294", bg = "NONE", strikethrough = true }),
         vim.api.nvim_set_hl(0, "CmpItemAbbrMatch", { fg = "#82AAFF", bg = "NONE", bold = true }),
         vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", { fg = "#82AAFF", bg = "NONE", bold = true }),
-        vim.api.nvim_set_hl(0, "CmpItemMenu", { fg = "#C792EA", bg = "NONE", italic = true }),
+        vim.api.nvim_set_hl(0, "CmpItemMenu", { fg = "#c4e2ff", bg = "NONE", italic = true }),
 
         vim.api.nvim_set_hl(0, "CmpItemKindField", { fg = "#11111B", bg = "#A6E3A1" }),
         vim.api.nvim_set_hl(0, "CmpItemKindProperty", { fg = "#11111B", bg = "#A6E3A1" }),
