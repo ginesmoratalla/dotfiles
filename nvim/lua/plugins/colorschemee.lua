@@ -23,16 +23,22 @@ return {
     --"sainnhe/everforest",
 	  -- dir = "~/me/nvim-themes/everforest",
 	  --"AlexvZyl/nordic.nvim",
-    "webhooked/kanso.nvim",
+    --"webhooked/kanso.nvim",
+    "catppuccin/nvim",
 		priority = 1000,
 		lazy = false,
 		config = function()
       --nordic_config()
-      require('kanso').setup({
-        theme = "zen",
-        background = {"zen"},
+      require('catppuccin').setup({
+        --theme = "zen",
+        --background = {"zen"},
+        color_overrides = {
+          all = {
+              base = "#0f0f14",
+          },
+        }
       })
-			vim.cmd([[colorscheme kanso]])
+			vim.cmd([[colorscheme catppuccin]])
 		end,
 	},
 
