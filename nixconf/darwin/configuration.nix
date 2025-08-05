@@ -1,17 +1,17 @@
 { pkgs, config, vars, ... }:
 let
-    _ = import ./homebrew.nix { inherit vars; };
+    homebrewConfig = import ./homebrew.nix { inherit pkgs config vars; };
 in {
 
 
   # Import submodules
   imports = [
+    homebrewConfig
   ];
 
   ## NIX
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "nix-command flakes";
-
 
   ## SYSTEM CONFIG
   # Used for backwards compatibility, please read the changelog before changing.

@@ -6,33 +6,40 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
   };
 
-  outputs = { self, nix-darwin, nixpkgs-unstable, nix-homebrew, ... }:
+  outputs = inputs@{ self, nix-darwin, nixpkgs-unstable, nix-homebrew, ... }:
     let
-
+      currentSystem = "aarch64-darwin";
       hosts = {
         darwinHost = "ginesmoratalla";
         nixosHost = "ginesmr";
       };
-      currentSystem = "aarch64-darwin";
-      sharedModules = import ./modules/default.nix;
-
     in {
         darwinConfigurations.${hosts.darwinHost} = nix-darwin.lib.darwinSystem {
           system = currentSystem;
           modules = [
-
             # Set Git commit hash for darwin-version.
             { system.configurationRevision = self.rev or self.dirtyRev or null; }
+            ./modules/shared.nix
             ./darwin/configuration.nix
             nix-homebrew.darwinModules.nix-homebrew
-            # sharedModules
+            # darwinHomebrew
           ];
           specialArgs = {
             vars = {
               host = hosts.darwinHost;
               plataform = currentSystem;
+              homebrew-cask = inputs."homebrew-cask";
+              homebrew-core = inputs."homebrew-core";
             };
           };
         };
@@ -43,7 +50,6 @@
             system = currentSystem;
             modules = [
               ./nixos/configuration.nix
-              # sharedModules 
             ];
           };
         } else {};

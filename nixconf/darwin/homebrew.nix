@@ -1,4 +1,4 @@
-{ pkgs, config, ... }:
+{ pkgs, config, vars, ... }:
 {
 
   ## HOMEBREW STUFF
@@ -25,5 +25,14 @@
     enableRosetta = true;
     user = vars.host;
     autoMigrate = true;
+
+    # Declarative tap management
+    taps = {
+      "homebrew/homebrew-core" = vars.homebrew-core;
+      "homebrew/homebrew-cask" = vars.homebrew-cask;
+    };
+
+    # taps can no longer be added imperatively with `brew tap`.
+    mutableTaps = false;
   };
 }
