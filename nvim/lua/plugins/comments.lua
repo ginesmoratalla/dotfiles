@@ -7,4 +7,3 @@ return {
     end,
     -- gcc command to add a comment
 }
-

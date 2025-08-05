@@ -30,8 +30,6 @@ return {
 		config = function()
       --nordic_config()
       require('catppuccin').setup({
-        --theme = "zen",
-        --background = {"zen"},
         color_overrides = {
           all = {
               base = "#0f0f14",
