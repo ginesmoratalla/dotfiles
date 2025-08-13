@@ -1,30 +1,32 @@
 { pkgs, config, vars, ... }:
 let
-    homebrewConfig = import ./homebrew.nix { inherit pkgs config vars; };
+  _ = import ./homebrew.nix { inherit vars; }; # reads the file and evaluates the result into the variable
 in {
-
 
   # Import submodules
   imports = [
-    homebrewConfig
+    ./homebrew.nix
+    ./modules
   ];
 
   ## NIX
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "nix-command flakes";
 
-  ## SYSTEM CONFIG
-  # Used for backwards compatibility, please read the changelog before changing.
-  # $ darwin-rebuild changelog
-  system.stateVersion = 6;
-
   # The platform the configuration will be used on.
   nixpkgs.hostPlatform = vars.plataform;
+  system.primaryUser = vars.host;
+
+  ## SYSTEM CONFIG
+  # $ darwin-rebuild changelog (please read the changelog before changing)
+  system.stateVersion = 6;
 
   system.defaults = {
     dock.autohide = true;
     NSGlobalDomain.KeyRepeat = 2;
   };
+
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   # SPOTLIGHT LINKS
   system.activationScripts.applications.text = let
@@ -46,5 +48,4 @@ in {
         ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix\ Apps/$app_name"
       done
     '';
-  system.primaryUser = vars.host;
 }

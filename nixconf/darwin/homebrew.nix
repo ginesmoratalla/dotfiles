@@ -1,4 +1,4 @@
-{ pkgs, config, vars, ... }:
+{ vars, ... }:
 {
 
   ## HOMEBREW STUFF
@@ -10,14 +10,19 @@
 
       casks = [
         "hammerspoon"
+        # "raycast"
       ];
 
       masApps = {
         # "Yoink" = 45762243;
+        # "Davinci Resolve" = 571213070;
       };
-      onActivation.autoUpdate = true;
-      onActivation.upgrade = true;
-      # onActivation.cleanup = "zap";
+
+      onActivation = {
+        autoUpdate = true;
+        upgrade = true;
+        # cleanup = "zap";
+      };
   };
 
   nix-homebrew = {
@@ -33,6 +38,6 @@
     };
 
     # taps can no longer be added imperatively with `brew tap`.
-    mutableTaps = false;
+    # mutableTaps = false;
   };
 }

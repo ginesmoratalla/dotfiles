@@ -16,43 +16,44 @@
     };
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs-unstable, nix-homebrew, ... }:
+  outputs = inputs @ 
+  { self
+  , nix-darwin
+  , nixpkgs-unstable
+  , nix-homebrew
+  , flake-utils
+  , ... 
+  }:
     let
-      currentSystem = "aarch64-darwin";
       hosts = {
         darwinHost = "ginesmoratalla";
         nixosHost = "ginesmr";
       };
+      system = {
+        darwin = "aarch64-darwin";
+        nixos = "x86_64-linux";
+      };
     in {
-        darwinConfigurations.${hosts.darwinHost} = nix-darwin.lib.darwinSystem {
-          system = currentSystem;
-          modules = [
-            # Set Git commit hash for darwin-version.
-            { system.configurationRevision = self.rev or self.dirtyRev or null; }
-            ./modules/shared.nix
-            ./darwin/configuration.nix
-            nix-homebrew.darwinModules.nix-homebrew
-            # darwinHomebrew
-          ];
-          specialArgs = {
-            vars = {
-              host = hosts.darwinHost;
-              plataform = currentSystem;
-              homebrew-cask = inputs."homebrew-cask";
-              homebrew-core = inputs."homebrew-core";
+        darwinConfigurations = {
+          ${hosts.darwinHost} = nix-darwin.lib.darwinSystem {
+            system = system.darwin;
+            modules = [
+              # Set Git commit hash for darwin-version.
+              { system.configurationRevision = self.rev or self.dirtyRev or null; }
+              nix-homebrew.darwinModules.nix-homebrew
+              ./shared
+              ./darwin/configuration.nix
+            ];
+            specialArgs = {
+              vars = {
+                host = hosts.darwinHost;
+                plataform = system.darwin;
+                homebrew-cask = inputs."homebrew-cask";
+                homebrew-core = inputs."homebrew-core";
+              };
             };
           };
         };
-
-        /*
-        nixosConfigurations = if currentSystem == linuxSystem then {
-          hostname = nixpkgs-unstable.lib.nixosSystem {
-            system = currentSystem;
-            modules = [
-              ./nixos/configuration.nix
-            ];
-          };
-        } else {};
-        */
+        # nixos here
     };
 }
