@@ -1,4 +1,9 @@
-{ pkgs, config, vars, ... }:
+{ pkgs
+, config
+, vars
+, self
+, ...
+}:
 let
   _ = import ./homebrew.nix { inherit vars; }; # reads the file and evaluates the result into the variable
 in {
@@ -6,8 +11,20 @@ in {
   # Import submodules
   imports = [
     ./homebrew.nix
-    ./modules
+    ./../../modules/darwin
   ];
+
+  users.users.${vars.host} = {
+    name = vars.host;
+    home = "/Users/${vars.host}";
+  };
+
+  home-manager.users.${vars.host} = {
+    imports = [
+      ../../modules/common
+    ];
+    home.stateVersion = "25.05";
+  };
 
   ## NIX
   # Necessary for using flakes on this system.
@@ -26,6 +43,8 @@ in {
     NSGlobalDomain.KeyRepeat = 2;
   };
 
+  # Set Git commit hash for darwin-version.
+  system.configurationRevision = self.rev or self.dirtyRev or null;
   security.pam.services.sudo_local.touchIdAuth = true;
 
   # SPOTLIGHT LINKS

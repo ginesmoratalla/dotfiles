@@ -3,8 +3,14 @@
 
   inputs = {
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
-    nix-darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
@@ -16,14 +22,15 @@
     };
   };
 
-  outputs = inputs @ 
+  outputs =  
   { self
   , nix-darwin
+  , home-manager
   , nixpkgs-unstable
   , nix-homebrew
   , flake-utils
   , ... 
-  }:
+  }@inputs:
     let
       hosts = {
         darwinHost = "ginesmoratalla";
@@ -38,13 +45,14 @@
           ${hosts.darwinHost} = nix-darwin.lib.darwinSystem {
             system = system.darwin;
             modules = [
-              # Set Git commit hash for darwin-version.
-              { system.configurationRevision = self.rev or self.dirtyRev or null; }
+              # home-manager stuff
+              home-manager.darwinModules.home-manager
               nix-homebrew.darwinModules.nix-homebrew
-              ./shared
-              ./darwin/configuration.nix
+              ./hosts
+              ./hosts/darwin/configuration.nix
             ];
             specialArgs = {
+              inherit self;
               vars = {
                 host = hosts.darwinHost;
                 plataform = system.darwin;
