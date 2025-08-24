@@ -37,16 +37,13 @@ let
       rtpFilePath = "cpu.tmux";
     };
   };
+  
 in {
   programs.tmux = {
     enable = true;
     newSession = false;
     terminal = "screen-256color";
-    plugins = with customPlugins; [
-      sensible
-      catppucin
-      cpu
-    ];
+    plugins = builtins.attrValues customPlugins;
     extraConfig = ''
       set -g mouse on
 
