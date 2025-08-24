@@ -26,7 +26,7 @@ let
       };
     };
     cpu = mkTmuxPlugin {
-      pluginName = "tmux-cpu";
+      pluginName = "cpu";
       version = "unstable-2025-22-08";
       src = pkgs.fetchFromGitHub {
         owner = "tmux-plugins";
@@ -37,6 +37,8 @@ let
       rtpFilePath = "cpu.tmux";
     };
   };
+
+  pluginShells = map (x: "run-shell " + x + "/share/tmux-plugins/${x.pluginName}/${x.pluginName}.tmux") (builtins.attrValues customPlugins);
   
 in {
   programs.tmux = {
@@ -68,7 +70,6 @@ in {
       set -g @catppuccin_window_text " #W"
       set -g @catppuccin_window_current_text " #W"
       set -g @catppuccin_window_current_number_color '#f5d742'
-
       set -g @cpu_low_bg_color "#[bg=#{@thm_green}]"        # background color when cpu is low
       set -g @cpu_medium_bg_color "#[bg=#{@thm_yellow}]"    # background color when cpu is medium
       set -g @cpu_high_bg_color "#[bg=#{@thm_red}]"         # background color when cpu is high
@@ -79,9 +80,6 @@ in {
       set -ag status-right "#[bg=#{@thm_flamingo},fg=#{@thm_crust}]#[reverse]#[noreverse] MEM #(memory_pressure | awk '/percentage/{print $5}') #{@myspace}"
       set -ag status-right "#[fg=#{@thm_crust},bg=#{@thm_blue}] #(whoami)  "
 
-      run-shell ${customPlugins.sensible}/share/tmux-plugins/sensible/sensible.tmux
-      run-shell ${customPlugins.catppucin}/share/tmux-plugins/catppuccin/catppuccin.tmux
-      run-shell ${customPlugins.cpu}/share/tmux-plugins/tmux-cpu/cpu.tmux
-    '';
+    '' + builtins.concatStringsSep "\n" pluginShells;
   };
 }
