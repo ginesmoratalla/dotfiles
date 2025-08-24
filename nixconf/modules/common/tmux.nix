@@ -14,7 +14,6 @@ let
         rev = "25cb91f42d020f675bb0a2ce3fbd3a5d96119efa";
         sha256 = "sha256-sw9g1Yzmv2fdZFLJSGhx1tatQ+TtjDYNZI5uny0+5Hg=";
       };
-      pluginConfig = '''';
     };
     catppucin = mkTmuxPlugin rec {
       pluginName = "catppuccin";
@@ -60,7 +59,7 @@ let
 
   pluginConfigs = builtins.concatStringsSep "\n" (
     map
-      (x: "${x.pluginConfig}")
+      (x: "${x.pluginConfig or ""}")
       (builtins.attrValues customPlugins)
   );
 
