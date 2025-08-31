@@ -63,7 +63,6 @@ let
       (builtins.attrValues customPlugins)
   );
 
-  
 in {
   programs.tmux = {
     enable = true;
@@ -93,7 +92,7 @@ in {
     '' + pluginConfigs + ''
 
       set -g status-right '#[fg=#{@thm_crust}]#{cpu_bg_color} CPU #{cpu_icon} #{cpu_percentage} #{@myspace}'
-      set -ag status-right "#[bg=#{@thm_flamingo},fg=#{@thm_crust}]#[reverse]#[noreverse] MEM #(memory_pressure | awk '/percentage/{print $5}') #{@myspace}"
+      set -ag status-right "#[bg=#{@thm_flamingo},fg=#{@thm_crust}]#[reverse]#[noreverse] MEM #(memory_pressure | awk '/percentage/{print 100 - $5}') #{@myspace}"
       set -ag status-right "#[fg=#{@thm_crust},bg=#{@thm_blue}] #(whoami)  "
 
       '' + pluginShells;

@@ -10,6 +10,7 @@
 
       casks = [
         "hammerspoon"
+        "selfcontrol"
         # "raycast"
       ];
 

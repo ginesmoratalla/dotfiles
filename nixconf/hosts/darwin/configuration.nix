@@ -58,8 +58,8 @@ in {
     pkgs.lib.mkForce ''
       # Set up applications
       echo "setting up desktop apps /Applications..." >&2
-      rm -rf /Applications/Nix\ Apps/
-      mkdir -p /Applications/Nix\ Apps/
+      rm -rf ~/Applications/Nix\ Apps/
+      mkdir -p ~/Applications/Nix\ Apps/
       find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
       while read -r src; do
         app_name=$(basename "$src")
