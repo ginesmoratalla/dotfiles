@@ -8,6 +8,7 @@
     typst
     cowsay
     ripgrep
+    cmake
   ];
 
   imports = [
