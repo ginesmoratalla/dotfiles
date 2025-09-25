@@ -225,6 +225,7 @@ in
       openvpn                                     # personal VPN
       gnome3.gnome-tweaks                         # GNOME Extensions and Settings
       prismlauncher                               # minecraft launcher
+      protonvpn-gui                               # Proton TESt
       python312Packages.psutil                    # for pywall
       python312Packages.pynvim                    # for pywall
       python3                                     # python 
