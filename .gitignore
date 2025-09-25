@@ -1,4 +1,5 @@
 /nvim/lazy-lock.json
+/nvim/lua/plugins/lsp-config.lua
 *.DS_Store
 *.log
 *.zshrc

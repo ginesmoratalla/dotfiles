@@ -188,6 +188,7 @@ in
       google-chrome                               # Browser
       gopls                                       # Go language server
       htop                                        # watch processes
+      htmx-lsp                                    # LSP
       imagemagick                                 # Image Manipulation
       python312Packages.inotify                   # For pywall 
       python312Packages.conda                     # Python package manager
@@ -213,7 +214,7 @@ in
       neovide                                     # nvim with graphic effects
       unstable.neovim                             # Code Editor
       nitch                                       # Terminal Fetch
-      nixd                                        # nix language server
+      nil                                         # nix language server
       nodejs_22                                   # node JS
       nodePackages.bash-language-server
       nodePackages.typescript
