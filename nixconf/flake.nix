@@ -2,6 +2,7 @@
   description = "ginesmr nix system flake";
 
   inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -27,6 +28,7 @@
   , nix-darwin
   , home-manager
   , nixpkgs-unstable
+  , nixpkgs
   , nix-homebrew
   , flake-utils
   , ... 
@@ -63,5 +65,12 @@
           };
         };
         # nixos here
+        nixosConfigurations = {
+          nixos = nixpkgs.lib.nixosSystem {
+            system = system.nixos;
+            specialArgs = { inherit nixpkgs-unstable; };
+            modules = [ ./hosts/nixos/configuration.nix ];
+          };
+        };
     };
 }

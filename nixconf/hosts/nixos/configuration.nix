@@ -2,17 +2,17 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, unstable-channel, ... }:
+{ config, pkgs, nixpkgs-unstable, ... }:
 
 let 
-  unstable = import unstable-channel {
+  unstable = import nixpkgs-unstable {
     system = pkgs.system;
   };
 in
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware_configuration.nix
+      ./hardware-configuration.nix
       ./nvidia.nix
       ./terminal.nix
       ./networking.nix
