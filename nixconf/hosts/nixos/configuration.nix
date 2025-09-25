@@ -2,15 +2,20 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, unstable-channel, ... }:
 
 let 
-  unstable = import <nixos-unstable> { config = config.nixpkgs.config; };
+  unstable = import unstable-channel {
+    system = pkgs.system;
+  };
 in
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      ./hardware_configuration.nix
+      ./nvidia.nix
+      ./terminal.nix
+      ./networking.nix
     ];
 
     # Bootloader.
@@ -26,7 +31,6 @@ in
     options v4l2loopback video_nr=2,3 width=640,1920 
     max_width=1920 height=480,1080 max_height=1080 format=YU12,YU12 exclusive_caps=1,1 card_label=Phone,Laptop debug=1
     '';
-    # Limit to 4 saved config safes when booting
     nix.gc.automatic = true;
     nix.extraOptions = "experimental-features = nix-command flakes";
     nix.settings = {
@@ -38,27 +42,19 @@ in
       ];
     };
 
-    networking.hostName = "nixos"; # Define your hostname.
-    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
     # Configure network proxy if necessary
     # networking.proxy.default = "http://user:password@proxy:port/";
     # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-    # Enable networking VPM
-    services.resolved.enable = true; 
-
-    # networking.networkmanager.enable = true;
-    # networking.wireguard.enable = true;
+    # Open ports in the firewall.
+    # networking.firewall.allowedUDPPorts = [ ... ];
+    # Or disable the firewall altogether.
 
     # Set your time zone.
     time.timeZone = "Europe/Madrid";
 
     # Select internationalisation properties.
     i18n.defaultLocale = "en_US.UTF-8";
-
     i18n.extraLocaleSettings = {
-
       LC_ADDRESS = "es_ES.UTF-8";
       LC_IDENTIFICATION = "es_ES.UTF-8";
       LC_MEASUREMENT = "es_ES.UTF-8";
@@ -72,43 +68,43 @@ in
 
     # Enable the X11 windowing system.
     services.xserver.enable = true;
-    virtualisation.docker.enable = true;
-    users.groups.docker.members = [ "ginesmr" ];
 
+    virtualisation = {
+      docker.enable = true;
+      virtualbox.host.enable = true;
+    };
+
+    users = {
+        groups.docker.members = [ "ginesmr" ];
+        extraGroups.vboxusers.members = [ "ginesmr" ];
+    };
 
     # Enable the GNOME Desktop Environment.
     services.xserver.displayManager.gdm.enable = true;
     services.xserver.desktopManager.gnome.enable = true;
 
-
     # Configure keymap in X11
-
     services.xserver = {
      layout = "es";
      xkbVariant = "";
     };
 
-    systemd.services.zenStartPage = {
-
-      description = "Zen Browser Astro Start Page";
-      after = ["network.target"];
-      wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        ExecStart = "/home/ginesmr/dotfiles/scripts/startpage.sh";
-        Restart = "always";
-        RestartSec = 5;
-        User = "ginesmr";
-        Group = "users";
-        Environment = "PATH=/run/current-system/sw/bin:/usr/local/bin:/usr/bin:/bin";
-      };
-
-    };
-
-  # services.jenkins = {
-  #   enable = true;
-  #   port = 9998; 
-  #  };
+    # systemd.services.zenStartPage = {
+    #
+    #   description = "Zen Browser Astro Start Page";
+    #   after = ["network.target"];
+    #   wantedBy = [ "multi-user.target" ];
+    #
+    #   serviceConfig = {
+    #     ExecStart = "/home/ginesmr/dotfiles/scripts/startpage.sh";
+    #     Restart = "always";
+    #     RestartSec = 5;
+    #     User = "ginesmr";
+    #     Group = "users";
+    #     Environment = "PATH=/run/current-system/sw/bin:/usr/local/bin:/usr/bin:/bin";
+    #   };
+    #
+    # };
 
     services.flatpak = {
      enable = true;
@@ -120,50 +116,8 @@ in
     # Configure console keymap
     console.keyMap = "es";
 
-
     # Enable sound with pipewire.
     hardware.pulseaudio.enable = false;
-
-    # NVIDIA Drivers
-    hardware.opengl = {
-      enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
-    };
-
-    services.xserver.videoDrivers = ["nvidia"];
-    systemd.services.nvidia-control-devices = {
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.linuxPackages.nvidia_x11.bin}/bin/nvidia-smi";
-    };
-    hardware.nvidia = {
-
-      modesetting.enable = true;
-
-      # Enable this only if you have graphical corruption issues 
-      # or application crashes after waking up from sleep
-      powerManagement.enable = false;
-
-      # Turns off GPU when not in use.
-      powerManagement.finegrained = false;
-
-      open = false;
-
-      # NVIDIA settings pannel accesible via 'nvidia-settings'
-      nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-
-
-    };
-
-    hardware.nvidia.prime = {
-      offload = {
-      	enable = true;
-        enableOffloadCmd = true;
-      };
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:90:0:0";
-    };
 
     security.rtkit.enable = true;
      
@@ -189,9 +143,9 @@ in
       isNormalUser = true;
       shell = pkgs.zsh;
       description = "ginesmr";
-      extraGroups = [ "networkmanager" "wheel" "docker"];
-      packages = with pkgs; [
-      ];
+      extraGroups = [ "vboxusers" "networkmanager" "wheel" "docker"];
+      # packages = with pkgs; [
+      # ];
     };
   
     # Install firefox.
@@ -199,7 +153,6 @@ in
   
     # Allow unfree packages
     nixpkgs.config.allowUnfree = true;
-    nixpkgs.config.cudaSupport = true;
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget
@@ -228,6 +181,8 @@ in
       fzf                                         # fuzzy find (terminal finder)
       gcc                                         # C compiler
       git                                         # Version Control
+      globalprotect-openconnect                   # For VPN
+      networkmanager-openconnect
       gnumake                                     # C project manager
       go                                          # Go Programming Language
       google-chrome                               # Browser
@@ -295,15 +250,14 @@ in
       yazi                                        # Terminal File Manager
       zls                                         # zig language server
       zsh                                         # terminal interpreter
-
      ];
 
      # Fonts (Nerdfonts)
      fonts.fonts = with pkgs; [
       (nerdfonts.override {fonts = [
-      "Iosevka"
-      "IosevkaTermSlab"
-      "JetBrainsMono"
+        "Iosevka"
+        "IosevkaTermSlab"
+        "JetBrainsMono"
       ];})
      ];
      fonts.fontDir.enable = true;
@@ -316,25 +270,6 @@ in
       dedicatedServer.openFirewall = true;
      };
 
-     # Zsh
-     programs.zsh = {
-       enable = true;
-       autosuggestions.enable = true;
-       zsh-autoenv.enable = true;
-       syntaxHighlighting.enable = true;
-
-       ohMyZsh = {
-         enable = true;
-         plugins = ["git"];
-         theme = "ys";
-       };
-     };
-
-     # Starship enable
-     programs.starship = {
-       enable = true;
-     };
-  	
       # Some programs need SUID wrappers, can be configured further or are
       # started in user sessions.
       # programs.mtr.enable = true;
@@ -347,16 +282,7 @@ in
     
       # Enable the OpenSSH daemon.
       services.openssh.enable = true;
-    
-      # Open ports in the firewall.
-      # networking.firewall.allowedUDPPorts = [ ... ];
-      # Or disable the firewall altogether.
-      # networking.firewall.enable = false;
 
-      networking.firewall = {
-        checkReversePath = false;
-        enable=true;
-      };
       # This value determines the NixOS release from which the default
       # settings for stateful data, like file locations and database versions
       # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -364,5 +290,4 @@ in
       # Before changing this value read the documentation for this option
       # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
       system.stateVersion = "24.05"; # Did you read the comment?
-  
   }
