@@ -2,20 +2,25 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, nixpkgs-unstable, ... }:
+{ config
+, pkgs
+# , nixpkgs-unstable
+, vars
+, ... 
+}:
 
 let 
-  unstable = import nixpkgs-unstable {
-    system = pkgs.system;
-  };
+  # unstable = import nixpkgs-unstable {
+  #   system = pkgs.system;
+  # };
 in
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ./nvidia.nix
       ./terminal.nix
       ./networking.nix
+      # ./nvidia.nix
     ];
 
     # Bootloader.
@@ -35,10 +40,10 @@ in
     nix.extraOptions = "experimental-features = nix-command flakes";
     nix.settings = {
       extra-substituters = [
-        "https://cuda-maintainers.cachix.org"
+        # "https://cuda-maintainers.cachix.org"
       ];
       extra-trusted-public-keys = [
-        "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+        # "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
       ];
     };
 
@@ -69,6 +74,10 @@ in
     # Enable the X11 windowing system.
     services.xserver.enable = true;
 
+    # Enable the GNOME Desktop Environment.
+    services.displayManager.gdm.enable = true;
+    services.desktopManager.gnome.enable = true;
+
     virtualisation = {
       docker.enable = true;
       virtualbox.host.enable = true;
@@ -79,32 +88,12 @@ in
         extraGroups.vboxusers.members = [ "ginesmr" ];
     };
 
-    # Enable the GNOME Desktop Environment.
-    services.xserver.displayManager.gdm.enable = true;
-    services.xserver.desktopManager.gnome.enable = true;
 
     # Configure keymap in X11
     services.xserver = {
-     layout = "es";
-     xkbVariant = "";
+     xkb.layout = "es";
+     xkb.variant = "";
     };
-
-    # systemd.services.zenStartPage = {
-    #
-    #   description = "Zen Browser Astro Start Page";
-    #   after = ["network.target"];
-    #   wantedBy = [ "multi-user.target" ];
-    #
-    #   serviceConfig = {
-    #     ExecStart = "/home/ginesmr/dotfiles/scripts/startpage.sh";
-    #     Restart = "always";
-    #     RestartSec = 5;
-    #     User = "ginesmr";
-    #     Group = "users";
-    #     Environment = "PATH=/run/current-system/sw/bin:/usr/local/bin:/usr/bin:/bin";
-    #   };
-    #
-    # };
 
     services.flatpak = {
      enable = true;
@@ -117,7 +106,7 @@ in
     console.keyMap = "es";
 
     # Enable sound with pipewire.
-    hardware.pulseaudio.enable = false;
+    services.pulseaudio.enable = false;
 
     security.rtkit.enable = true;
      
@@ -126,12 +115,6 @@ in
      alsa.enable = true;
      alsa.support32Bit = true;
      pulse.enable = true;
-      
-     # If you want to use JACK applications, uncomment this
-     #jack.enable = true;     
-     # use the example session manager (no others are packaged yet so this is enabled by default,
-     # no need to redefine it in your config for now)
-     # media-session.enable = true;
 
     };
 
@@ -139,13 +122,18 @@ in
     # services.xserver.libinput.enable = true;
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.ginesmr = {
+    users.users.${vars.host} = {
       isNormalUser = true;
       shell = pkgs.zsh;
       description = "ginesmr";
       extraGroups = [ "vboxusers" "networkmanager" "wheel" "docker"];
-      # packages = with pkgs; [
-      # ];
+    };
+
+    home-manager.users.${vars.host} = {
+      imports = [
+        ../../modules/common
+      ];
+      home.stateVersion = "25.05";
     };
   
     # Install firefox.
@@ -167,7 +155,7 @@ in
       ccls                                        # C / C++ Language Server
       checkstyle                                  # for formatting java code
       cmatrix                                     # matrix-like terminal effect
-      cudatoolkit                                 # self-explanatory
+      # cudatoolkit                                 # self-explanatory
       dig                                         # DNSs
       discord                                     # discord
       docker                                      # containers 
@@ -176,12 +164,10 @@ in
       droidcam                                    # phone camera connector
       fastfetch                                   # fetcher
       ffmpeg                                      # I don't know
-      firefox                                     # browser
       flatpak                                     # flatpak package manager
       fzf                                         # fuzzy find (terminal finder)
       gcc                                         # C compiler
       git                                         # Version Control
-      globalprotect-openconnect                   # For VPN
       networkmanager-openconnect
       gnumake                                     # C project manager
       go                                          # Go Programming Language
@@ -190,8 +176,6 @@ in
       htop                                        # watch processes
       htmx-lsp                                    # LSP
       imagemagick                                 # Image Manipulation
-      python312Packages.inotify                   # For pywall 
-      python312Packages.conda                     # Python package manager
       iperf3                                      # IP Pinging and Stuff
       jdt-language-server                         # Java Language Server
       jflap                                       # GUI for formal languages (SCC.312)
@@ -202,17 +186,15 @@ in
       kubernetes                                  # Container Orchestration
       lazygit                                     # git TUI
       libreoffice                                 # Office
-      localsend                                   # Open Source AirDrop
       lsof                                        # List Open Files command
       lshw                                        # Node Hardware Information
       lua                                         # lua
       lua-language-server                         # Language Server for Lua Vim
-      mangal                                      # manga client
       maven                                       # Java Pakcage Builder
       minikube                                    # Run Kubernetes Locally
       neofetch                                    # Terminal Fetch
-      neovide                                     # nvim with graphic effects
-      unstable.neovim                             # Code Editor
+      # unstable.neovim                           # Code Editor
+      neovim                                      # Code Editor
       nitch                                       # Terminal Fetch
       nil                                         # nix language server
       nodejs_22                                   # node JS
@@ -220,19 +202,14 @@ in
       nodePackages.typescript
       nodePackages.typescript-language-server
       obsidian                                    # To Take Notes
-      okular                                      # Document Viewer
+      kdePackages.okular                          # Document Viewer
       openjdk11                                   # java development kit
       openvpn                                     # personal VPN
-      gnome3.gnome-tweaks                         # GNOME Extensions and Settings
+      gnome-tweaks                                # GNOME Extensions and Settings
       prismlauncher                               # minecraft launcher
-      protonvpn-gui                               # Proton TESt
-      python312Packages.psutil                    # for pywall
-      python312Packages.pynvim                    # for pywall
-      python3                                     # python 
-      python312                                     # python 
+      protonvpn-gui
       pyright                                     # pythong language server
-      pywal                                       # get wallpaper color scheme
-      qt5ct                                       # Qt Program Configurator
+      libsForQt5.qt5ct                            # Qt Program Configurator
       ripgrep                                     # live grep with nvim telescope
       spotify                                     # Music Client
       starship                                    # Terminal Prompt
@@ -255,15 +232,15 @@ in
      ];
 
      # Fonts (Nerdfonts)
-     fonts.fonts = with pkgs; [
-      (nerdfonts.override {fonts = [
-        "Iosevka"
-        "IosevkaTermSlab"
-        "JetBrainsMono"
-      ];})
-     ];
-     fonts.fontDir.enable = true;
-     fonts.fontconfig.enable = true;
+     fonts = {
+        fontDir.enable = true;
+        fontconfig.enable = true;
+        packages = with pkgs; [
+          nerd-fonts.iosevka
+          nerd-fonts.iosevka-term-slab
+          nerd-fonts.jetbrains-mono
+        ];
+     };
 
      # Steam
      programs.steam = {

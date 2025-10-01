@@ -2,15 +2,16 @@
   description = "ginesmr nix system flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+    # nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core = {
@@ -27,7 +28,7 @@
   { self
   , nix-darwin
   , home-manager
-  , nixpkgs-unstable
+  # , nixpkgs-unstable
   , nixpkgs
   , nix-homebrew
   , flake-utils
@@ -56,7 +57,7 @@
             specialArgs = {
               inherit self;
               vars = {
-                host = hosts.darwinHost;
+                host = hosts.darwinhost;
                 plataform = system.darwin;
                 homebrew-cask = inputs."homebrew-cask";
                 homebrew-core = inputs."homebrew-core";
@@ -68,8 +69,21 @@
         nixosConfigurations = {
           nixos = nixpkgs.lib.nixosSystem {
             system = system.nixos;
-            specialArgs = { inherit nixpkgs-unstable; };
-            modules = [ ./hosts/nixos/configuration.nix ];
+            modules = [
+              home-manager.nixosModules.home-manager {
+                home-manager = {
+                  useUserPackages = true;
+                  useGlobalPkgs = true;
+                };
+              }
+              ./hosts
+              ./hosts/nixos/configuration.nix 
+            ];
+            specialArgs = {
+              # inherit nixpkgs-unstable;
+              # inherit nixpkgs;
+              vars = { host = hosts.nixosHost; };
+            };
           };
         };
     };
