@@ -4,23 +4,22 @@
 
 { config
 , pkgs
-# , nixpkgs-unstable
 , vars
+, nixpkgs-stable
 , ... 
 }:
-
-let 
-  # unstable = import nixpkgs-unstable {
-  #   system = pkgs.system;
-  # };
-in
+let
+  stable = import nixpkgs-stable {
+    system = pkgs.system;
+  };
+in 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
       ./terminal.nix
       ./networking.nix
-      # ./nvidia.nix
+      ./nvidia.nix
     ];
 
     # Bootloader.
@@ -40,10 +39,11 @@ in
     nix.extraOptions = "experimental-features = nix-command flakes";
     nix.settings = {
       extra-substituters = [
-        # "https://cuda-maintainers.cachix.org"
+        "https://cache.nixos.org/"
+        "https://cuda-maintainers.cachix.org"
       ];
       extra-trusted-public-keys = [
-        # "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+        "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
       ];
     };
 
@@ -118,9 +118,6 @@ in
 
     };
 
-    # Enable touchpad support (enabled default in most desktopManager).
-    # services.xserver.libinput.enable = true;
-
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.${vars.host} = {
       isNormalUser = true;
@@ -137,7 +134,7 @@ in
     };
   
     # Install firefox.
-    programs.firefox.enable = true;
+    # programs.firefox.enable = true;
   
     # Allow unfree packages
     nixpkgs.config.allowUnfree = true;
@@ -146,16 +143,11 @@ in
     # $ nix search wget
     environment.systemPackages = with pkgs; [
 
-      astyle                                      # Indenter and Formatter for C, C++, and Java
       bash                                        # terminal interpreter
       biome                                       # Formatter, linter, bundler, and more for JavaScript, TypeScript, JSON, HTML, Markdown, and CSS.
-      black                                       # python code formatter
       btop                                        # like htop but cooler I guess
       cbonsai                                     # terminal bonsai tree
-      ccls                                        # C / C++ Language Server
-      checkstyle                                  # for formatting java code
-      cmatrix                                     # matrix-like terminal effect
-      # cudatoolkit                                 # self-explanatory
+      # stable.cudatoolkit                        # self-explanatory
       dig                                         # DNSs
       discord                                     # discord
       docker                                      # containers 
@@ -165,6 +157,7 @@ in
       fastfetch                                   # fetcher
       ffmpeg                                      # I don't know
       flatpak                                     # flatpak package manager
+      stable.firefox
       fzf                                         # fuzzy find (terminal finder)
       gcc                                         # C compiler
       git                                         # Version Control
@@ -172,12 +165,9 @@ in
       gnumake                                     # C project manager
       go                                          # Go Programming Language
       google-chrome                               # Browser
-      gopls                                       # Go language server
       htop                                        # watch processes
-      htmx-lsp                                    # LSP
       imagemagick                                 # Image Manipulation
       iperf3                                      # IP Pinging and Stuff
-      jdt-language-server                         # Java Language Server
       jflap                                       # GUI for formal languages (SCC.312)
       flatpak                                     # flatpak package manager
       killall                                     # Process Killer
@@ -189,32 +179,24 @@ in
       lsof                                        # List Open Files command
       lshw                                        # Node Hardware Information
       lua                                         # lua
-      lua-language-server                         # Language Server for Lua Vim
       maven                                       # Java Pakcage Builder
       minikube                                    # Run Kubernetes Locally
       neofetch                                    # Terminal Fetch
-      # unstable.neovim                           # Code Editor
       neovim                                      # Code Editor
       nitch                                       # Terminal Fetch
-      nil                                         # nix language server
       nodejs_22                                   # node JS
-      nodePackages.bash-language-server
-      nodePackages.typescript
-      nodePackages.typescript-language-server
       obsidian                                    # To Take Notes
       kdePackages.okular                          # Document Viewer
       openjdk11                                   # java development kit
       openvpn                                     # personal VPN
       gnome-tweaks                                # GNOME Extensions and Settings
       prismlauncher                               # minecraft launcher
-      protonvpn-gui
-      pyright                                     # pythong language server
+      protonvpn-cli
       libsForQt5.qt5ct                            # Qt Program Configurator
       ripgrep                                     # live grep with nvim telescope
       spotify                                     # Music Client
       starship                                    # Terminal Prompt
       superfile                                   # Terminal-Based File Manager
-      stylua                                      # lua language formatter
       tmux                                        # terminal multiplexer
       traceroute                                  # Trace Packets Sent
       tree                                        # tree file visualizer
@@ -227,8 +209,26 @@ in
       xclip                                       # Clippboard package
       xdg-desktop-portal                          # For Desktop Sandobxed Apps
       yazi                                        # Terminal File Manager
-      zls                                         # zig language server
       zsh                                         # terminal interpreter
+
+
+      
+      checkstyle                                  # for formatting java code
+      black                                       # python code formatter
+      astyle                                      # Indenter and Formatter for C, C++, and Java
+      ccls                                        # C / C++ Language Server
+      cmatrix                                     # matrix-like terminal effect
+      gopls                                       # Go language server
+      htmx-lsp                                    # LSP
+      jdt-language-server                         # Java Language Server
+      lua-language-server                         # Language Server for Lua Vim
+      nil                                         # nix language server
+      zls                                         # zig language server
+      stylua                                      # lua language formatter
+      pyright                                     # pythong language server
+      nodePackages.bash-language-server
+      nodePackages.typescript
+      nodePackages.typescript-language-server
      ];
 
      # Fonts (Nerdfonts)

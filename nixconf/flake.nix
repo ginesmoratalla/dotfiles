@@ -2,9 +2,8 @@
   description = "ginesmr nix system flake";
 
   inputs = {
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    # nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,8 +27,8 @@
   { self
   , nix-darwin
   , home-manager
-  # , nixpkgs-unstable
   , nixpkgs
+  , nixpkgs-stable
   , nix-homebrew
   , flake-utils
   , ... 
@@ -77,11 +76,10 @@
                 };
               }
               ./hosts
-              ./hosts/nixos/configuration.nix 
+              ./hosts/nixos/configuration.nix
             ];
             specialArgs = {
-              # inherit nixpkgs-unstable;
-              # inherit nixpkgs;
+              inherit nixpkgs-stable;
               vars = { host = hosts.nixosHost; };
             };
           };

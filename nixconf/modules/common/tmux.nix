@@ -1,5 +1,4 @@
 { pkgs
-, lib
 , ...
 }:
 let
@@ -86,6 +85,8 @@ in {
 
       set -g status-right-length 100
       set -g status-interval 5
+      set -g status-bg '#111117'
+
 
       set -g status-left "#[fg=#3bb843]   "                # So the session doesn't show on the left 
 
