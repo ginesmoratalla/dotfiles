@@ -30,6 +30,7 @@ in
     # Enable virtual camera (droidcam)
     boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
     boot.kernelModules = [ "v4l2loopback" ];
+    boot.kernelParams = [ "kvm.enable_virt_at_load=0" ]; # Workaround for VBox to use virtualisation
     boot.extraModprobeConfig =
     ''
     options v4l2loopback video_nr=2,3 width=640,1920 
@@ -73,6 +74,7 @@ in
 
     # Enable the X11 windowing system.
     services.xserver.enable = true;
+    services.xserver.videoDrivers = [ "virtualbox" ];
 
     # Enable the GNOME Desktop Environment.
     services.displayManager.gdm.enable = true;
@@ -81,6 +83,7 @@ in
     virtualisation = {
       docker.enable = true;
       virtualbox.host.enable = true;
+      virtualbox.guest.enable = true;
     };
 
     users = {
@@ -210,9 +213,6 @@ in
       xdg-desktop-portal                          # For Desktop Sandobxed Apps
       yazi                                        # Terminal File Manager
       zsh                                         # terminal interpreter
-
-
-      
       checkstyle                                  # for formatting java code
       black                                       # python code formatter
       astyle                                      # Indenter and Formatter for C, C++, and Java
