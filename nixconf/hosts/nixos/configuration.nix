@@ -194,7 +194,7 @@ in
       openvpn                                     # personal VPN
       gnome-tweaks                                # GNOME Extensions and Settings
       prismlauncher                               # minecraft launcher
-      protonvpn-cli
+      protonvpn-gui
       libsForQt5.qt5ct                            # Qt Program Configurator
       ripgrep                                     # live grep with nvim telescope
       spotify                                     # Music Client
