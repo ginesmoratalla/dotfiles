@@ -10,6 +10,7 @@
     cowsay
     ripgrep
     cmake
+    podman
   ];
 
   imports = [

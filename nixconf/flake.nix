@@ -56,7 +56,7 @@
             specialArgs = {
               inherit self;
               vars = {
-                host = hosts.darwinhost;
+                host = hosts.darwinHost;
                 plataform = system.darwin;
                 homebrew-cask = inputs."homebrew-cask";
                 homebrew-core = inputs."homebrew-core";
