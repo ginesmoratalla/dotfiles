@@ -6,11 +6,13 @@
       enable = true;
       brews = [
         "mas"
+        "mysql"
       ];
 
       casks = [
         "hammerspoon"
         "selfcontrol"
+        # "adobe-acrobat-reader"
         # "raycast"
       ];
 
@@ -21,7 +23,7 @@
 
       onActivation = {
         autoUpdate = true;
-        upgrade = true;
+        upgrade = false;
         # cleanup = "zap";
       };
   };

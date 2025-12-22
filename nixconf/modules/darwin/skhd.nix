@@ -1,0 +1,69 @@
+{ config, lib, pkgs, ... }:
+{
+  services.skhd = {
+    enable = true;
+    skhdConfig = ''
+      alt - j : yabai -m window --focus south
+      alt - k : yabai -m window --focus north 
+      alt - h : yabai -m window --focus west 
+      alt - l : yabai -m window --focus east
+
+      # Change focus on external displays
+      alt - s : yabai -m display --focus west 
+      alt - g : yabai -m display --focus east 
+
+      # Layout modifications
+
+      # Rotate clockwise
+      shift + alt - r : yabai -m space --rotate 270 
+
+      # Flip along x/y axis
+      shift + alt - y : yabai -m space --mirror y-axis 
+      shift + alt - x : yabai -m space --mirror x-axis 
+
+      # Toggle window float
+      shift + alt - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
+
+      # Window sizing (maximize)
+      shift + alt - m : yabai -m window --toggle zoom-fullscreen
+
+      # Balance windows to occupy the same
+      shift + alt - e : yabai -m space --balance
+
+      # Swap windows
+      shift + alt - j : yabai -m window --swap south
+      shift + alt - k : yabai -m window --swap north 
+      shift + alt - h : yabai -m window --swap west 
+      shift + alt - l : yabai -m window --swap east
+
+      # move windows and split
+      ctrl + alt - j : yabai -m window --warp south
+      ctrl + alt - k : yabai -m window --warp north 
+      ctrl + alt - h : yabai -m window --warp west 
+      ctrl + alt - l : yabai -m window --warp east
+
+      # Move windows across displays
+      shift + alt - s : yabai -m window --display west; yabai -m display --focus west
+      shift + alt - g : yabai -m window --display east; yabai -m display --focus east
+
+      # Move window to prev and next space
+      shift + alt - p : yabai -m window --space prev
+      shift + alt - n : yabai -m window --space next
+
+      # Move window to space X
+      shift + alt - 1 : yabai -m window --space 1
+      shift + alt - 2 : yabai -m window --space 2
+      shift + alt - 3 : yabai -m window --space 3
+      shift + alt - 4 : yabai -m window --space 4
+      shift + alt - 5 : yabai -m window --space 5
+      shift + alt - 6 : yabai -m window --space 6
+      shift + alt - 7 : yabai -m window --space 7
+
+      # Start / Stop yabai
+      # As of now, due to nix, i cant stop it, ill figure it out
+      ctrl + alt - s : yabai
+      # ctrl + alt - q : yabai
+    '';
+  };
+
+}

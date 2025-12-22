@@ -1,7 +1,11 @@
 { pkgs, ... }:
 {
-  environment.systemPackages = [
-    # (pkgs.callPackage ./fastfetch.nix {} )
-    pkgs.yabai
+  imports = [
+    ./yabai.nix
+    ./skhd.nix
   ];
+
+  environment.systemPackages = with pkgs; [
+  ];
+
 }

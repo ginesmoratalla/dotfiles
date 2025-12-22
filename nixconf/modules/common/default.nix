@@ -11,6 +11,19 @@
     ripgrep
     cmake
     podman
+    (texliveFull.withPackages (
+        ps: with ps; [ 
+          emptypage 
+          csquotes 
+          sectsty
+          titlesec 
+          placeins 
+          tocloft
+          lastpage
+          svg-inkscape
+        ]
+      )
+    )
   ];
 
   imports = [
