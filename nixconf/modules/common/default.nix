@@ -11,6 +11,8 @@
     ripgrep
     cmake
     podman
+    qbittorrent
+    opencode
     (texliveFull.withPackages (
         ps: with ps; [ 
           emptypage 

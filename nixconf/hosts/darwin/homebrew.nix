@@ -12,6 +12,7 @@
       casks = [
         "hammerspoon"
         "selfcontrol"
+        "vlc"
         # "adobe-acrobat-reader"
         # "raycast"
       ];

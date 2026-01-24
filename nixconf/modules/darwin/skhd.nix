@@ -63,6 +63,12 @@
       # As of now, due to nix, i cant stop it, ill figure it out
       ctrl + alt - s : yabai
       # ctrl + alt - q : yabai
+
+
+      ctrl + shift - h : yabai -m window --resize left:-50:0; yabai -m window --resize right:-50:0
+      ctrl + shift - j : yabai -m window --resize bottom:0:50; yabai -m window --resize top:0:50
+      ctrl + shift - k : yabai -m window --resize top:0:-50; yabai -m window --resize bottom:0:-50
+      ctrl + shift - l : yabai -m window --resize right:50:0; yabai -m window --resize left:50:0
     '';
   };
 

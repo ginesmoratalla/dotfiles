@@ -3,6 +3,7 @@
   services.yabai = {
 
     enable = true;
+    enableScriptingAddition = true;
     config = {
       window_placement = "second_child";
       layout = "bsp";
