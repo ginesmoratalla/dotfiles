@@ -12,18 +12,6 @@ end
 
 return {
   {
-    --"sho-87/kanagawa-paper.nvim",
-    --"yashguptaz/calvera-dark.nvim",
-    --"killitar/obscure.nvim",
-    --"projekt0n/github-nvim-theme",
-    --"rebelot/kanagawa.nvim",
-    --"Vallen217/eidolon.nvim",
-    --"Vallen217/eidolon.nvim",
-    --"decaycs/decay.nvim",
-    --"sainnhe/everforest",
-	  -- dir = "~/me/nvim-themes/everforest",
-	  --"AlexvZyl/nordic.nvim",
-    --"webhooked/kanso.nvim",
     "catppuccin/nvim",
 		priority = 1000,
 		lazy = false,
@@ -32,7 +20,8 @@ return {
       require('catppuccin').setup({
         color_overrides = {
           all = {
-              base = "#0f0f14",
+              -- base = "#0f0f14",
+              base = "#0d0d0d",
           },
         }
       })

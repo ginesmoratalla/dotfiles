@@ -12,7 +12,10 @@
     cmake
     podman
     qbittorrent
-    opencode
+    minikube
+    pandoc
+    # opencode
+    mosquitto
     (texliveFull.withPackages (
         ps: with ps; [ 
           emptypage 

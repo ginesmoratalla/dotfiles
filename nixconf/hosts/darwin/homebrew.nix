@@ -10,6 +10,7 @@
       ];
 
       casks = [
+        "unity"
         "hammerspoon"
         "selfcontrol"
         "vlc"

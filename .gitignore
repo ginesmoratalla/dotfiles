@@ -4,3 +4,7 @@
 *.log
 *.zshrc
 .gitconfig
+
+/superfile/*
+!/superfile/*.toml
+

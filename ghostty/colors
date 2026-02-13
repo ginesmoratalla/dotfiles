@@ -1,4 +1,5 @@
 theme = Electron Highlighter
-background = 111117
+background = 0A0A0A
+# background = 111117
 # theme = nightfox
 # background = 12121d

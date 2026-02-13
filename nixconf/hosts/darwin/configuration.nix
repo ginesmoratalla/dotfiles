@@ -20,6 +20,7 @@ in {
   };
 
   home-manager.users.${vars.host} = {
+    targets.darwin.linkApps.enable = true;
     imports = [
       ../../modules/common
     ];
@@ -52,11 +53,12 @@ in {
     env = pkgs.buildEnv {
       name  = "system-applications";
       paths = config.environment.systemPackages;
-      pathsToLink = "/Applications";
+      # pathsToLink = "/Applications";
     };
   in 
     pkgs.lib.mkForce ''
       # Set up applications
+
       echo "setting up desktop apps /Applications..." >&2
       rm -rf ~/Applications/Nix\ Apps/
       mkdir -p ~/Applications/Nix\ Apps/

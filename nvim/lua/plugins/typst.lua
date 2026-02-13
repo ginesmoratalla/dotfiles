@@ -8,7 +8,7 @@ return {
       vim.keymap.set("n", "<leader>tp", ":TypstPreview<CR>", { silent = true })
       vim.keymap.set("n", "<leader>ts", ":TypstPreviewStop<CR>", { silent = true })
   end,
-  require 'typst-preview'.setup {
-  }
+  -- require 'typst-preview'.setup {
+  -- }
 
 }

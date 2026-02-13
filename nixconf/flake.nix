@@ -21,7 +21,14 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
+
+    opencode-flake = {
+      url = "github:sst/opencode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
+
 
   outputs =  
   { self
@@ -31,6 +38,7 @@
   , nixpkgs-stable
   , nix-homebrew
   , flake-utils
+  , opencode-flake
   , ... 
   }@inputs:
     let
