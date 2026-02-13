@@ -8,3 +8,4 @@
 /superfile/*
 !/superfile/*.toml
 
+/kitty/kitty-themes
