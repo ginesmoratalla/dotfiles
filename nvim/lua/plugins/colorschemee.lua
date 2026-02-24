@@ -10,23 +10,38 @@ local function nordic_config()
   })
 end
 
+local function catpuccin_config()
+  require('catppuccin').setup({
+    color_overrides = {
+      all = {
+          -- base = "#0f0f14",
+          base = "#0d0d0d",
+      },
+    }
+  })
+  vim.cmd([[colorscheme catppuccin]])
+end
+
+local function cyberdream_config()
+  require('cyberdream').setup({
+    variant = "dark",
+    transparent = false,
+    colors = {
+        bg = "#0d0d0d",
+    }
+  })
+  vim.cmd([[colorscheme cyberdream]])
+end
+
 return {
   {
-    "catppuccin/nvim",
+    "scottmckendry/cyberdream.nvim",
+    -- "catppuccin/nvim",
 		priority = 1000,
 		lazy = false,
 		config = function()
-      --nordic_config()
-      require('catppuccin').setup({
-        color_overrides = {
-          all = {
-              -- base = "#0f0f14",
-              base = "#0d0d0d",
-          },
-        }
-      })
-			vim.cmd([[colorscheme catppuccin]])
-		end,
+      cyberdream_config()
+    end,
 	},
 
 	--{ dir = "~/Documents/me/forks/nvim-fonts/calvera-dark.nvim" },
