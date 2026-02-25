@@ -9,3 +9,5 @@
 !/superfile/*.toml
 
 /kitty/kitty-themes
+
+/ghostty/shaders
