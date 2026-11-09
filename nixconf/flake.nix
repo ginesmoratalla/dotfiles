@@ -2,29 +2,31 @@
   description = "ginesmr nix system flake";
 
   inputs = {
+
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
       flake = false;
     };
+
     homebrew-cask = {
       url = "github:homebrew/homebrew-cask";
       flake = false;
-    };
-
-    opencode-flake = {
-      url = "github:sst/opencode";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };
@@ -37,58 +39,52 @@
   , nixpkgs
   , nixpkgs-stable
   , nix-homebrew
-  , flake-utils
-  , opencode-flake
   , ... 
   }@inputs:
+
     let
+      users = {
+        darwin = "ginesmoratalla";
+        nixos = "ginesmr";
+      };
+
       hosts = {
-        darwinHost = "ginesmoratalla";
-        nixosHost = "ginesmr";
+        macbookHost = "Giness-MacBook-Pro";
       };
-      system = {
-        darwin = "aarch64-darwin";
-        nixos = "x86_64-linux";
-      };
+
     in {
+
+        # Nix Darwin
         darwinConfigurations = {
-          ${hosts.darwinHost} = nix-darwin.lib.darwinSystem {
-            system = system.darwin;
+
+          # MacBook
+          ${hosts.macbookHost} = nix-darwin.lib.darwinSystem {
             modules = [
-              # home-manager stuff
               home-manager.darwinModules.home-manager
               nix-homebrew.darwinModules.nix-homebrew
-              ./hosts
-              ./hosts/darwin/configuration.nix
+              ./home/darwin
+              ./hosts/macbook
+              ./system/darwin
             ];
             specialArgs = {
-              inherit self;
-              vars = {
-                host = hosts.darwinHost;
-                plataform = system.darwin;
-                homebrew-cask = inputs."homebrew-cask";
-                homebrew-core = inputs."homebrew-core";
-              };
+              inherit self inputs;
+              vars = { user = users.darwin; };
             };
           };
+
         };
+
         # nixos here
         nixosConfigurations = {
           nixos = nixpkgs.lib.nixosSystem {
-            system = system.nixos;
             modules = [
-              home-manager.nixosModules.home-manager {
-                home-manager = {
-                  useUserPackages = true;
-                  useGlobalPkgs = true;
-                };
-              }
+              home-manager.nixosModules.home-manager
               ./hosts
               ./hosts/nixos/configuration.nix
             ];
             specialArgs = {
               inherit nixpkgs-stable;
-              vars = { host = hosts.nixosHost; };
+              vars = { host = users.nixos; };
             };
           };
         };

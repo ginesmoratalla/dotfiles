@@ -1,4 +1,4 @@
-{ config, pkgs, home-manager, ... }:
+{ ... }:
 {
   services.yabai = {
 
@@ -19,6 +19,7 @@
 
       # Left click + drag
       mouse_action1 = "move";
+
       # Right click + drag 
       mouse_action2 = "resize";
       mouse_drop_action = "swap";

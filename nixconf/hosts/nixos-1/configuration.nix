@@ -159,7 +159,6 @@ in
       droidcam                                    # phone camera connector
       fastfetch                                   # fetcher
       ffmpeg                                      # I don't know
-      flatpak                                     # flatpak package manager
       stable.firefox
       fzf                                         # fuzzy find (terminal finder)
       gcc                                         # C compiler
@@ -183,7 +182,6 @@ in
       lshw                                        # Node Hardware Information
       lua                                         # lua
       maven                                       # Java Pakcage Builder
-      minikube                                    # Run Kubernetes Locally
       neofetch                                    # Terminal Fetch
       neovim                                      # Code Editor
       nitch                                       # Terminal Fetch
@@ -196,7 +194,6 @@ in
       prismlauncher                               # minecraft launcher
       protonvpn-gui
       libsForQt5.qt5ct                            # Qt Program Configurator
-      ripgrep                                     # live grep with nvim telescope
       spotify                                     # Music Client
       starship                                    # Terminal Prompt
       superfile                                   # Terminal-Based File Manager
@@ -204,7 +201,6 @@ in
       traceroute                                  # Trace Packets Sent
       tree                                        # tree file visualizer
       unzip                                       # Unzipper
-      uv                                          # Python package manager
       vim                                         # Text Editor
       vscode                                      # IDE / Code Editor
       wget                                        # Deliver Files through App Layer Protocol 

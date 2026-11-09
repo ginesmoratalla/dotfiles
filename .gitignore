@@ -1,13 +1,13 @@
 /nvim/lazy-lock.json
 /nvim/lua/plugins/lsp-config.lua
+
 *.DS_Store
 *.log
 *.zshrc
 .gitconfig
 
+./.secrets
 /superfile/*
 !/superfile/*.toml
 
-/kitty/kitty-themes
-
-/ghostty/shaders
+/nixconf/result

@@ -1,27 +1,27 @@
-{ vars, ... }:
+{ vars, inputs, ... }:
 {
 
   ## HOMEBREW STUFF
   homebrew = {
+
       enable = true;
+
       brews = [
         "mas"
         "mysql"
+        "socket_vmnet"
       ];
 
       casks = [
-        "unity"
         "hammerspoon"
-        "selfcontrol"
-        "vlc"
-        # "adobe-acrobat-reader"
-        # "raycast"
+        "selfcontrol"                               # Block domains
+        "gcloud-cli"
+        "pycharm"
+        "vlc"                                       # VLC Player
+        "proton-pass"
       ];
 
-      masApps = {
-        # "Yoink" = 45762243;
-        # "Davinci Resolve" = 571213070;
-      };
+      masApps = {};
 
       onActivation = {
         autoUpdate = true;
@@ -33,16 +33,17 @@
   nix-homebrew = {
     enable = true;
     enableRosetta = true;
-    user = vars.host;
+    user = vars.user;
     autoMigrate = true;
 
     # Declarative tap management
     taps = {
-      "homebrew/homebrew-core" = vars.homebrew-core;
-      "homebrew/homebrew-cask" = vars.homebrew-cask;
+      "homebrew/homebrew-cask" = inputs.homebrew-cask;
+      "homebrew/homebrew-core" = inputs.homebrew-core;
     };
 
     # taps can no longer be added imperatively with `brew tap`.
     # mutableTaps = false;
   };
 }
+
